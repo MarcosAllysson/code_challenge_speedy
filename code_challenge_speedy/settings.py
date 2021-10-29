@@ -1,6 +1,5 @@
 import os
 from pathlib import Path
-from django.utils.translation import ugettext_lazy as _
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -17,6 +16,7 @@ ALLOWED_HOSTS = [
 
 # Application definition
 INSTALLED_APPS = [
+    'django_crontab',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -25,6 +25,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+    'productsapp',
+    'productsimportationapp',
 ]
 
 MIDDLEWARE = [
@@ -41,6 +43,12 @@ MIDDLEWARE = [
 CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:8000',
     'http://localhost:8000',
+]
+
+# CRON
+CRONJOBS = [
+    # every-day-at-midnight
+    ('0 0 * * *', 'productsimportationapp.cron.import_data_from_web')
 ]
 
 ROOT_URLCONF = 'code_challenge_speedy.urls'
@@ -77,6 +85,13 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -102,15 +117,6 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-LANGUAGES = (
-    ('pt', _('Portugues')),
-)
-
-# Translation path
-LOCALE_PATHS = (
-    os.path.join(BASE_DIR, 'locale'),
-)
-
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -127,11 +133,11 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend'
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        'rest_framework.permissions.AllowAny',
     ],
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 20
 }

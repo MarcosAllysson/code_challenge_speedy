@@ -4,6 +4,7 @@ certifi==2021.10.8
 charset-normalizer==2.0.7
 Django==3.2.8
 django-cors-headers==3.10.0
+django-crontab==0.7.1
 django-filter==21.1
 djangorestframework==3.12.4
 idna==3.3
@@ -11,6 +12,7 @@ iniconfig==1.1.1
 Markdown==3.3.4
 packaging==21.0
 pluggy==1.0.0
+psutil==5.8.0
 psycopg2-binary==2.9.1
 py==1.10.0
 pyparsing==3.0.3
